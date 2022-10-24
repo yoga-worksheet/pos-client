@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import Button from "../../component/Button";
-import spiderman_ironman from "../../img/spiderman-ironman.png";
 import { NavLink, useNavigate } from "react-router-dom";
-import { login } from "../../api/auth";
+import { useDispatch } from "react-redux";
 import qs from "qs";
+import Button from "../../component/Button";
+import Modal from "../../component/Modal";
+import { login } from "../../api/auth";
+import { userLogin } from "../../features/Auth/action";
+import spiderman_ironman from "../../img/spiderman-ironman.png";
 
 const Index = () => {
 	const [data, setData] = useState({
 		email: "",
 		password: "",
 	});
+	const [modal, setModal] = useState(false);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const emailHandler = (event) => {
 		setData((prevState) => ({ ...prevState, email: event.target.value }));
 	};
@@ -27,17 +32,30 @@ const Index = () => {
 		};
 		login(qs.stringify(payload)).then((result) => {
 			if (!result.error) {
-				localStorage.setItem("auth", result.token);
-				setTimeout(() => {
-					return navigate("/");
-				}, 3000);
+				// localStorage.setItem(
+				// 	"auth",
+				// 	JSON.stringify({ user: result.user, token: result.token })
+				// );
+				dispatch(userLogin(result));
+				setModal(true);
 			} else {
-				console.log()
+				console.log(result);
 			}
 		});
 	};
+	const moveToHome = () => {
+		setModal(false);
+		return navigate("/");
+	};
 	return (
 		<div className="flex min-h-screen justify-center items-center font-Poppins text-zinc-800">
+			<Modal
+				icon={<ion-icon name="checkmark-circle"></ion-icon>}
+				message="Login Successful!"
+				type="success"
+				boolean={modal}
+				onClick={() => moveToHome()}
+			/>
 			<div className="2xl:container flex bg-[#ffffff] lg:max-h-96 w-8/12 shadow-lg rounded-2xl">
 				<div
 					hidden
@@ -78,14 +96,14 @@ const Index = () => {
 								className="w-full bg-zinc-100 py-2 px-4 rounded-3xl font-semibold transition ease-in-out border-2 border-transparent focus:border-blue-600 focus:outline-none"
 							/>
 						</div>
-						<div className="flex flex-wrap mt-6 space-x-2">
+						<div className="flex flex-wrap mt-6 lg:space-x-2">
 							<Button
 								text="Login"
 								type="primary-filled"
 								additionalClass="mb-2 w-full md:w-auto md:mb-0"
 								onClick={() => submitHandler()}
 							/>
-							<NavLink to="/auth/register">
+							<NavLink to="/auth/register" className="w-full">
 								<Button
 									text="Register"
 									type="secondary-filled"

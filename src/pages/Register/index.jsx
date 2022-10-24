@@ -177,7 +177,7 @@ const Index = () => {
 									""
 								)}
 							</div>
-							<div className="flex flex-wrap mt-6 space-x-2">
+							<div className="flex flex-wrap mt-6 lg:space-x-2">
 								<Button
 									text="Register"
 									type="primary-filled"
@@ -185,11 +185,13 @@ const Index = () => {
 									disabled={dataChecker(data)}
 									onClick={() => submitHandler()}
 								/>
-								<NavLink to="/auth/login" ><Button
-									text="Login"
-									type="secondary-filled"
-									additionalClass="mb-2 w-full md:w-auto md:mb-0"
-								/></NavLink>
+								<NavLink to="/auth/login" className="w-full">
+									<Button
+										text="Login"
+										type="secondary-filled"
+										additionalClass="mb-2 w-full md:w-auto md:mb-0"
+									/>
+								</NavLink>
 							</div>
 						</div>
 					</div>

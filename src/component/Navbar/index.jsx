@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useScrollPosition } from "../../hooks";
+import { logout } from "../../api/auth";
+import { userLogout } from "../../features/Auth/action";
+import Modal from "../Modal";
 
 const Index = () => {
 	const [popUp, setPopUp] = useState(false);
 	const [menu, setMenu] = useState(false);
+	const [modal, setModal] = useState(false);
 	const scrollPosition = useScrollPosition();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { user } = useSelector((state) => state.auth);
 	let popUpStyle =
 		"absolute text-slate-700 transition ease-in-out -right-4 mt-2 ml-4 shadow-lg w-auto h-auto py-4 px-3 bg-[#ffffff] rounded-3xl";
 	const togglePopUp = () => {
@@ -16,6 +24,22 @@ const Index = () => {
 		if (menu) setMenu(false);
 		else setMenu(true);
 	};
+	const logoutHandler = () => {
+		if (localStorage.getItem("auth")) {
+			logout().then((result) => {
+				if (!result.error) {
+					setModal(true);
+					dispatch(userLogout());
+				} else {
+					console.log(result);
+				}
+			});
+		}
+	};
+	const moveToHome = () => {
+		setModal(false);
+		navigate("/");
+	};
 	return (
 		<div
 			className={
@@ -24,6 +48,15 @@ const Index = () => {
 					: "w-full transition sticky top-0 mt-8 flex flex-col lg:flex-row justify-between lg:items-center text-slate-700 px-20 py-4"
 			}
 		>
+			{modal && (
+				<Modal
+					icon={<ion-icon name="checkmark-circle"></ion-icon>}
+					message="Logout Successful!"
+					type="success"
+					boolean={modal}
+					onClick={() => moveToHome()}
+				/>
+			)}
 			<div className="flex justify-between">
 				<h1
 					className={
@@ -35,11 +68,7 @@ const Index = () => {
 					<NavLink to="/">Action Figure</NavLink>
 				</h1>
 				<button
-					className={
-						scrollPosition > 0
-							? "flex items-center transition ease-in-out lg:hidden text-3xl text-slate-700 bg-indigo-100 p-3 rounded-full hover:shadow-lg"
-							: "flex items-center transition ease-in-out lg:hidden text-3xl bg-indigo-100 p-3 rounded-full hover:shadow-lg"
-					}
+					className="flex items-center transition ease-in-out lg:hidden text-3xl bg-indigo-100 p-3 rounded-full hover:shadow-lg"
 					onClick={toggleMenu}
 				>
 					<ion-icon name="menu-outline"></ion-icon>
@@ -64,22 +93,45 @@ const Index = () => {
 			{menu ? (
 				<div className="transition ease-in-out  mt-2 shadow-lg w-full h-auto py-4 px-3 bg-[#ffffff] rounded-3xl">
 					<ul className="font-light text-normal space-y-2">
-						<li className="border-b py-2 px-6">
-							<NavLink
-								to="/account/details"
-								className="hover:text-blue-500"
-							>
-								Account
-							</NavLink>
-						</li>
-						<li className="py-2 px-6">
-							<NavLink
-								to="/auth/logout"
-								className="hover:text-blue-500"
-							>
-								Logout
-							</NavLink>
-						</li>
+						{user ? (
+							<>
+								<li className="border-b py-2 px-6">
+									<NavLink
+										to="/account/details"
+										className="hover:text-blue-500"
+									>
+										Account
+									</NavLink>
+								</li>
+								<li className="py-2 px-6">
+									<button
+										className="hover:text-blue-500"
+										onClick={() => logoutHandler()}
+									>
+										Logout
+									</button>
+								</li>
+							</>
+						) : (
+							<>
+								<li className=" py-2 px-6">
+									<NavLink
+										to="/auth/register"
+										className="hover:text-blue-500"
+									>
+										Register
+									</NavLink>
+								</li>
+								<li className=" py-2 px-6">
+									<NavLink
+										to="/auth/login"
+										className="hover:text-blue-500"
+									>
+										Login
+									</NavLink>
+								</li>
+							</>
+						)}
 					</ul>
 				</div>
 			) : (
@@ -88,7 +140,11 @@ const Index = () => {
 			<div className="flex items-center space-x-10">
 				<NavLink
 					to="/cart"
-					className="fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
+					className={
+						scrollPosition > 0
+							? "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 lg:text-white rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
+							: "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
+					}
 				>
 					<ion-icon name="cart"></ion-icon>
 					<span className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
@@ -97,7 +153,11 @@ const Index = () => {
 				</NavLink>
 				<div className="relative ml-0 w-auto">
 					<button
-						className="invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto text-3xl flex items-center"
+						className={
+							scrollPosition > 0
+								? "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto lg:text-white text-3xl flex items-center"
+								: "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto text-3xl flex items-center"
+						}
 						onClick={togglePopUp}
 					>
 						<div className="text-xs">
@@ -117,22 +177,45 @@ const Index = () => {
 						}
 					>
 						<ul className="font-light text-normal space-y-2 text-slate-700">
-							<li className="border-b py-2 px-6">
-								<NavLink
-									to="/account/details"
-									className="hover:text-blue-500"
-								>
-									Account
-								</NavLink>
-							</li>
-							<li className="py-2 px-6">
-								<NavLink
-									to="/auth/logout"
-									className="hover:text-blue-500"
-								>
-									Logout
-								</NavLink>
-							</li>
+							{user ? (
+								<>
+									<li className="border-b py-2 px-6">
+										<NavLink
+											to="/account/details"
+											className="hover:text-blue-500"
+										>
+											Account
+										</NavLink>
+									</li>
+									<li className="py-2 px-6">
+										<button
+											className="hover:text-blue-500"
+											onClick={() => logoutHandler()}
+										>
+											Logout
+										</button>
+									</li>
+								</>
+							) : (
+								<>
+									<li className=" py-2 px-6">
+										<NavLink
+											to="/auth/register"
+											className="hover:text-blue-500"
+										>
+											Register
+										</NavLink>
+									</li>
+									<li className=" py-2 px-6">
+										<NavLink
+											to="/auth/login"
+											className="hover:text-blue-500"
+										>
+											Login
+										</NavLink>
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				</div>
