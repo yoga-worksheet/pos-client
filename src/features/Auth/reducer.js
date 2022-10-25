@@ -1,6 +1,8 @@
 import { USER_LOGIN, USER_LOGOUT } from "./constants";
 
-const initialState = {};
+const initialState = localStorage.getItem("auth")
+	? JSON.parse(localStorage.getItem("auth"))
+	: {};
 
 const authReducer = (state = initialState, { type, payload }) => {
 	switch (type) {

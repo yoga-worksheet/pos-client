@@ -28,8 +28,9 @@ const Index = () => {
 		if (localStorage.getItem("auth")) {
 			logout().then((result) => {
 				if (!result.error) {
-					setModal(true);
+					localStorage.removeItem("auth");
 					dispatch(userLogout());
+					setModal(true);
 				} else {
 					console.log(result);
 				}
@@ -155,15 +156,21 @@ const Index = () => {
 					<button
 						className={
 							scrollPosition > 0
-								? "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto lg:text-white text-3xl flex items-center"
-								: "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto text-3xl flex items-center"
+								? "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto lg:text-white text-3xl flex items-center space-x-2"
+								: "invisible opacity-0 pointer-events-none lg:opacity-100 lg:visible lg:pointer-events-auto text-3xl flex items-center space-x-2"
 						}
 						onClick={togglePopUp}
 					>
+						{user ? (
+							<span className="text-sm">
+								Hi, {user.full_name}
+							</span>
+						) : (
+							<ion-icon name="person"></ion-icon>
+						)}
 						<div className="text-xs">
 							<ion-icon name="caret-down-outline"></ion-icon>
 						</div>
-						<ion-icon name="person"></ion-icon>
 					</button>
 					<div
 						className={

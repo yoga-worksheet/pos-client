@@ -16,8 +16,6 @@ const Index = () => {
 	});
 	const [modal, setModal] = useState(false);
 	const navigate = useNavigate();
-
-	const modalToggler = (status) => setModal(status);
 	const nameHandler = (event) => {
 		setData((prevState) => ({ ...prevState, name: event.target.value }));
 	};
@@ -67,14 +65,15 @@ const Index = () => {
 				if (!result.error) {
 					setModal(true);
 					reset();
-					setTimeout(() => {
-						return navigate("/auth/login");
-					}, 3000);
 				}
 			})
 			.catch((error) => {
 				console.log(error);
 			});
+	};
+	const moveToLogin = () => {
+		setModal(false);
+		return navigate("/auth/login");
 	};
 	return (
 		<>
@@ -83,7 +82,7 @@ const Index = () => {
 				message="Register Successful!"
 				type="success"
 				boolean={modal}
-				onClick={() => modalToggler(false)}
+				onClick={() => moveToLogin()}
 			/>
 			<div className="flex min-h-screen justify-center items-center font-Poppins text-zinc-800">
 				<div className="2xl:container flex bg-[#ffffff] lg:max-h-fit w-8/12 shadow-lg rounded-2xl">
@@ -143,6 +142,9 @@ const Index = () => {
 									type="password"
 									value={data.password}
 									onChange={(event) => passwordHandler(event)}
+									onKeyDown={(event) =>
+										event.key === "enter" && submitHandler()
+									}
 									className="w-full bg-zinc-100 py-2 px-4 rounded-3xl font-semibold transition ease-in-out border-2 border-transparent focus:border-blue-600 focus:outline-none"
 								/>
 							</div>
@@ -185,7 +187,7 @@ const Index = () => {
 									disabled={dataChecker(data)}
 									onClick={() => submitHandler()}
 								/>
-								<NavLink to="/auth/login" className="w-full">
+								<NavLink to="/auth/login" className="w-full lg:w-auto">
 									<Button
 										text="Login"
 										type="secondary-filled"

@@ -32,10 +32,10 @@ const Index = () => {
 		};
 		login(qs.stringify(payload)).then((result) => {
 			if (!result.error) {
-				// localStorage.setItem(
-				// 	"auth",
-				// 	JSON.stringify({ user: result.user, token: result.token })
-				// );
+				localStorage.setItem(
+					"auth",
+					JSON.stringify({ user: result.user, token: result.token })
+				);
 				dispatch(userLogin(result));
 				setModal(true);
 			} else {
@@ -96,14 +96,14 @@ const Index = () => {
 								className="w-full bg-zinc-100 py-2 px-4 rounded-3xl font-semibold transition ease-in-out border-2 border-transparent focus:border-blue-600 focus:outline-none"
 							/>
 						</div>
-						<div className="flex flex-wrap mt-6 lg:space-x-2">
+						<div className="flex flex-wrap mt-6 md:space-x-2">
 							<Button
 								text="Login"
 								type="primary-filled"
 								additionalClass="mb-2 w-full md:w-auto md:mb-0"
 								onClick={() => submitHandler()}
 							/>
-							<NavLink to="/auth/register" className="w-full">
+							<NavLink to="/auth/register" className="w-full md:w-auto">
 								<Button
 									text="Register"
 									type="secondary-filled"
