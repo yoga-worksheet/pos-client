@@ -1,13 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./component/Root";
 import Home from "./pages/Home";
+import Admin from "./pages/Admin";
 import { Login, Register } from "./pages/Auth/pages";
 import { Account, AccountForm, Details } from "./pages/Account/pages";
 import { Cart, ConfirmPage, ChooseAddress } from "./pages/Cart/pages";
 import { Addresses, AddressForm } from "./pages/Address/pages";
 import { Orders, Invoice } from "./pages/Order/pages";
 import { NotFound } from "./pages/Error/pages";
-import { Admin, Products, ProductForm, Categories } from "./pages/Admin/pages";
+import { Categories, CategoryForm } from "./pages/Admin/Category/pages";
+import { Products, ProductForm } from "./pages/Admin/Product/pages";
+import { Tags, TagForm } from "./pages/Admin/Tag/pages";
 
 const router = createBrowserRouter([
 	{
@@ -30,6 +33,22 @@ const router = createBrowserRouter([
 					{
 						path: "product-form/:action",
 						element: <ProductForm />,
+					},
+					{
+						path: "categories",
+						element: <Categories />,
+					},
+					{
+						path: "category-form/:action",
+						element: <CategoryForm />,
+					},
+					{
+						path: "tags",
+						element: <Tags />,
+					},
+					{
+						path: "tag-form/:action",
+						element: <TagForm />,
 					},
 				],
 			},

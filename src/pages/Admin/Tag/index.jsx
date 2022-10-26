@@ -2,14 +2,15 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Table from "../../../component/Table";
 import Button from "../../../component/Button";
-const Categories = () => {
+
+const Tags = () => {
 	const data = {
 		headData: ["Name", "Action"],
 		bodyData: [
 			[
 				"Marvel",
 				<div className="flex w-full space-x-2">
-					<NavLink to="/admin/category-form/edit">
+					<NavLink to="/admin/tag-form/edit">
 						<Button
 							type="primary-outlined"
 							text="Edit"
@@ -26,7 +27,7 @@ const Categories = () => {
 			[
 				"Marvel",
 				<div className="flex w-full space-x-2">
-					<NavLink to="/admin/category-form/edit">
+					<NavLink to="/admin/tag-form/edit">
 						<Button
 							type="primary-outlined"
 							text="Edit"
@@ -43,7 +44,7 @@ const Categories = () => {
 			[
 				"Marvel",
 				<div className="flex w-full space-x-2">
-					<NavLink to="/admin/category-form/edit">
+					<NavLink to="/admin/tag-form/edit">
 						<Button
 							type="primary-outlined"
 							text="Edit"
@@ -63,7 +64,7 @@ const Categories = () => {
 		<div className="w-full lg:w-9/12 bg-white rounded-3xl shadow-lg px-10 py-8 text-slate-700">
 			<div className="border-b pb-4 mb-8 flex justify-between items-center">
 				<NavLink to="/admin/category-form/create">
-					<Button type="primary-filled" text="Add Category" />
+					<Button type="primary-filled" text="Add Tag" />
 				</NavLink>
 				<div className="flex items-center group border-2 border-blue-300 bg-[#ffffff] rounded-3xl mt-4 lg:mt-0 px-4 py-2 space-x-2 w-full lg:w-4/12">
 					<div className="text-slate-500 flex items-center">
@@ -81,4 +82,4 @@ const Categories = () => {
 	);
 };
 
-export default Categories;
+export default Tags;
