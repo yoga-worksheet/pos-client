@@ -1,34 +1,25 @@
 import axios from "axios";
 
 const register = async (payload) => {
-	const response = await fetch(
+	const result = await axios.post(
 		`${process.env.REACT_APP_API_HOST}/auth/register`,
-		{
-			headers: { "content-type": "application/x-www-form-urlencoded" },
-			method: "POST",
-			body: payload,
-		}
+		payload
 	);
-	const result = await response.json();
-	return result;
+	return result.data;
 };
 
 const login = async (payload) => {
-	const response = await fetch(
+	const result = await axios.post(
 		`${process.env.REACT_APP_API_HOST}/auth/login`,
-		{
-			headers: { "content-type": "application/x-www-form-urlencoded" },
-			method: "POST",
-			body: payload,
-		}
+		payload
 	);
-	const result = await response.json();
-	return result;
+	return result.data;
 };
 
 const logout = async () => {
 	const result = await axios.post(
 		`${process.env.REACT_APP_API_HOST}/auth/logout`,
+		{},
 		{
 			headers: {
 				Authorization: `Bearer ${
@@ -37,7 +28,7 @@ const logout = async () => {
 			},
 		}
 	);
-	return result;
+	return result.data;
 };
 
 export { register, login, logout };

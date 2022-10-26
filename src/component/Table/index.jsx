@@ -14,9 +14,11 @@ const Table = ({ data }) => {
 			</thead>
 			<tbody>
 				{data.bodyData.map((row, item) => (
-					<tr className="border-b">
+					<tr className="border-b" key={item * 2}>
 						{row.map((data, index) => (
-							<td className="px-4 py-2">{data}</td>
+							<td className="px-4 py-2" key={index + 5}>
+								{data}
+							</td>
 						))}
 					</tr>
 				))}

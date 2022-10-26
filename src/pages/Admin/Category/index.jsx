@@ -61,7 +61,7 @@ const Categories = () => {
 	};
 	return (
 		<div className="w-full lg:w-9/12 bg-white rounded-3xl shadow-lg px-10 py-8 text-slate-700">
-			<div className="border-b pb-4 mb-8 flex justify-between items-center">
+			<div className="border-b pb-4 mb-8 flex flex-col lg:flex-row justify-between items-center">
 				<NavLink to="/admin/category-form/create">
 					<Button type="primary-filled" text="Add Category" />
 				</NavLink>
