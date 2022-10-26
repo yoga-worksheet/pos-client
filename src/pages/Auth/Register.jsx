@@ -7,7 +7,7 @@ import Modal from "../../component/Modal";
 import { useNavigate, NavLink } from "react-router-dom";
 import qs from "qs";
 
-const Index = () => {
+const Register = () => {
 	const [data, setData] = useState({
 		name: "",
 		email: "",
@@ -187,7 +187,7 @@ const Index = () => {
 									disabled={dataChecker(data)}
 									onClick={() => submitHandler()}
 								/>
-								<NavLink to="/auth/login" className="w-full lg:w-auto">
+								<NavLink to="/auth/login" className="w-full md:w-auto">
 									<Button
 										text="Login"
 										type="secondary-filled"
@@ -203,4 +203,4 @@ const Index = () => {
 	);
 };
 
-export default Index;
+export default Register;

@@ -1,19 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Root from "./component/Root";
 import Home from "./pages/Home";
-import Account from "./pages/Account";
-import AccountForm from "./pages/Account/AccountForm";
-import Details from "./pages/Account/Details";
-import Orders from "./pages/Order";
-import Addresses from "./pages/Address";
-import AddressForm from "./pages/Address/AddressForm";
-import NotFound from "./pages/Error/NotFound";
-import Invoice from "./pages/Order/Invoice";
-import Cart from "./pages/Cart";
-import ChooseAddress from "./pages/Cart/ChooseAddress";
-import ConfirmPage from "./pages/Cart/ConfirmPage";
+import { Login, Register } from "./pages/Auth/pages";
+import { Account, AccountForm, Details } from "./pages/Account/pages";
+import { Cart, ConfirmPage, ChooseAddress } from "./pages/Cart/pages";
+import { Addresses, AddressForm } from "./pages/Address/pages";
+import { Orders, Invoice } from "./pages/Order/pages";
+import { NotFound } from "./pages/Error/pages";
+import { Admin, Products, ProductForm, Categories } from "./pages/Admin/pages";
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +18,20 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				element: <Home />,
+			},
+			{
+				path: "admin",
+				element: <Admin />,
+				children: [
+					{
+						path: "products",
+						element: <Products />,
+					},
+					{
+						path: "product-form/:action",
+						element: <ProductForm />,
+					},
+				],
 			},
 			{
 				path: "account",

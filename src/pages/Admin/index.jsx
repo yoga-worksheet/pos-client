@@ -2,19 +2,23 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import LeftNav from "../../component/LeftNav";
 
-const Index = () => {
+const Admin = () => {
 	const linkData = [
 		{
-			name: "Account",
-			href: "/account/details",
+			name: "Products",
+			href: "/admin/products",
+		},
+		{
+			name: "Categories",
+			href: "/admin/categories",
+		},
+		{
+			name: "Tags",
+			href: "/admin/tags",
 		},
 		{
 			name: "Orders",
-			href: "/account/orders",
-		},
-		{
-			name: "Addresses",
-			href: "/account/addresses",
+			href: "/admin/Orders",
 		},
 	];
 	return (
@@ -25,4 +29,4 @@ const Index = () => {
 	);
 };
 
-export default Index;
+export default Admin;

@@ -8,7 +8,7 @@ import { login } from "../../api/auth";
 import { userLogin } from "../../features/Auth/action";
 import spiderman_ironman from "../../img/spiderman-ironman.png";
 
-const Index = () => {
+const Login = () => {
 	const [data, setData] = useState({
 		email: "",
 		password: "",
@@ -103,7 +103,10 @@ const Index = () => {
 								additionalClass="mb-2 w-full md:w-auto md:mb-0"
 								onClick={() => submitHandler()}
 							/>
-							<NavLink to="/auth/register" className="w-full md:w-auto">
+							<NavLink
+								to="/auth/register"
+								className="w-full md:w-auto"
+							>
 								<Button
 									text="Register"
 									type="secondary-filled"
@@ -118,4 +121,4 @@ const Index = () => {
 	);
 };
 
-export default Index;
+export default Login;

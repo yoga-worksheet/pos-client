@@ -87,7 +87,7 @@ const Index = () => {
 				</div>
 				<input
 					type="text"
-					className="bg-transparent w-full focus:outline-none placeholder:font-light placeholder:italic"
+					className="bg-transparent w-full font-bold focus:outline-none placeholder:font-light placeholder:italic"
 					placeholder="Search marvel, spiderman, naruto ..."
 				/>
 			</div>
