@@ -11,6 +11,7 @@ import { NotFound } from "./pages/Error/pages";
 import { Categories, CategoryForm } from "./pages/Admin/Category/pages";
 import { Products, ProductForm } from "./pages/Admin/Product/pages";
 import { Tags, TagForm } from "./pages/Admin/Tag/pages";
+import { AdminOrders } from "./pages/Admin/Order/pages";
 
 const router = createBrowserRouter([
 	{
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
 					{
 						path: "tag-form/:action",
 						element: <TagForm />,
+					},
+					{
+						path: "orders",
+						element: <AdminOrders />,
 					},
 				],
 			},
