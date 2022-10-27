@@ -39,6 +39,7 @@ const Index = () => {
 	};
 	const moveToHome = () => {
 		setModal(false);
+		togglePopUp();
 		navigate("/");
 	};
 	return (
@@ -139,7 +140,7 @@ const Index = () => {
 				""
 			)}
 			<div className="flex items-center space-x-10">
-				{user.role !== "admin" && (
+				{user ? (
 					<NavLink
 						to="/cart"
 						className={
@@ -153,6 +154,8 @@ const Index = () => {
 							5
 						</span>
 					</NavLink>
+				) : (
+					""
 				)}
 				<div className="relative ml-0 w-auto">
 					<button
