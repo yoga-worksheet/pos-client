@@ -67,7 +67,7 @@ const Tags = () => {
 		});
 	};
 
-	const data = {
+	const dataTable = {
 		headData: ["Name", "Action"],
 		bodyData: !keyword
 			? tagsMapping
@@ -100,7 +100,7 @@ const Tags = () => {
 					/>
 				</div>
 			</div>
-			<Table data={data} />
+			<Table data={dataTable} />
 		</div>
 	);
 };
