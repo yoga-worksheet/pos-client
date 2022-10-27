@@ -4,6 +4,7 @@ import Button from "../Button";
 const LeftSection = ({ tags, categories }) => {
 	const [choosenCategory, setChoosenCategory] = useState("");
 	const [choosenTags, setChoosenTags] = useState([]);
+
 	const categoryHandler = (category) => {
 		if (!choosenCategory || choosenCategory !== category) {
 			setChoosenCategory(category);
@@ -28,13 +29,13 @@ const LeftSection = ({ tags, categories }) => {
 					{categories.map((category, index) => (
 						<Button
 							type={
-								choosenCategory === category
+								choosenCategory === category._id
 									? "primary-filled"
 									: "primary-outlined"
 							}
 							key={index + 1}
-							text={category}
-							onClick={() => categoryHandler(category)}
+							text={category.name}
+							onClick={() => categoryHandler(category._id)}
 							additionalClass="text-sm px-3 py-2"
 						/>
 					))}
@@ -46,14 +47,14 @@ const LeftSection = ({ tags, categories }) => {
 					{tags.map((tag, index) => (
 						<Button
 							type={
-								choosenTags.includes(tag)
+								choosenTags.includes(tag._id)
 									? "triary-filled"
 									: "triary-outlined"
 							}
 							key={index + 1}
-							text={tag}
-							additionalClass="text-sm px-3 py-2"
-							onClick={() => tagsHandler(tag)}
+							text={tag.name}
+							additionalClass="text-xs px-2 py-1"
+							onClick={() => tagsHandler(tag._id)}
 						/>
 					))}
 				</div>

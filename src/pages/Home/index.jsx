@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCategories } from "../../api/category";
+import { getTags } from "../../api/tag";
+import { getProducts } from "../../api/product";
 import LeftSection from "../../component/LeftSection";
 import ProductList from "../../component/ProductList";
 
-const index = () => {
-	const categories = ["Manga", "Marvel", "DC"];
-	const tags = ["Superman", "Spiderman", "Batman", "Naruto", "Luffy"];
+const Home = () => {
+	const [categories, setCategories] = useState([]);
+	const [tags, setTags] = useState([]);
+	const [products, setProducts] = useState([]);
+	useEffect(() => {
+		getCategories().then((result) => setCategories(result));
+		getTags().then((result) => setTags(result));
+		getProducts().then((result) => setProducts(result.data));
+		return () => {
+			setCategories([]);
+			setTags([]);
+			setProducts([]);
+		};
+	}, []);
 	return (
 		<div className="mt-0 lg:mt-12 mb-12 px-6 lg:px-12 w-full h-auto flex flex-col lg:flex-row flex-wrap justify-between">
-			<LeftSection categories={categories} tags={tags} />
-			<ProductList />
+			<LeftSection tags={tags} categories={categories} />
+			<ProductList products={products} />
 		</div>
 	);
 };
 
-export default index;
+export default Home;
