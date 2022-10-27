@@ -4,6 +4,7 @@ import { getTags } from "../../api/tag";
 import { getProducts } from "../../api/product";
 import LeftSection from "../../component/LeftSection";
 import ProductList from "../../component/ProductList";
+import Pagination from "../../component/Pagination";
 
 const Home = () => {
 	const [categories, setCategories] = useState([]);
@@ -20,9 +21,12 @@ const Home = () => {
 		};
 	}, []);
 	return (
-		<div className="mt-0 lg:mt-12 mb-12 px-6 lg:px-12 w-full h-auto flex flex-col lg:flex-row flex-wrap justify-between">
-			<LeftSection tags={tags} categories={categories} />
-			<ProductList products={products} />
+		<div>
+			<div className="mt-0 lg:mt-12 mb-12 px-6 lg:px-12 w-full h-auto flex flex-col lg:flex-row flex-wrap justify-between">
+				<LeftSection tags={tags} categories={categories} />
+				<ProductList products={products} />
+			</div>
+			<Pagination />
 		</div>
 	);
 };
