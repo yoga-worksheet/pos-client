@@ -139,19 +139,21 @@ const Index = () => {
 				""
 			)}
 			<div className="flex items-center space-x-10">
-				<NavLink
-					to="/cart"
-					className={
-						scrollPosition > 0
-							? "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 lg:text-white rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
-							: "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
-					}
-				>
-					<ion-icon name="cart"></ion-icon>
-					<span className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
-						5
-					</span>
-				</NavLink>
+				{user.role !== "admin" && (
+					<NavLink
+						to="/cart"
+						className={
+							scrollPosition > 0
+								? "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 lg:text-white rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
+								: "fixed right-0 bottom-0 mb-10 mr-10 bg-indigo-100 text-slate-700 rounded-full p-3 flex lg:relative lg:inset-0 lg:m-0 lg:bg-transparent lg:p-0 text-3xl items-center"
+						}
+					>
+						<ion-icon name="cart"></ion-icon>
+						<span className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
+							5
+						</span>
+					</NavLink>
+				)}
 				<div className="relative ml-0 w-auto">
 					<button
 						className={
