@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
-import { store } from "../../../api/category";
+import React, { useEffect, useState } from "react";
+import {
+	NavLink,
+	useParams,
+	useNavigate,
+	useSearchParams,
+} from "react-router-dom";
+import { storeCategory, updateCategory } from "../../../api/category";
 import qs from "qs";
 import Button from "../../../component/Button";
 import Modal from "../../../component/Modal";
@@ -9,8 +14,12 @@ const CategoryForm = () => {
 	const { action } = useParams();
 	const [name, setName] = useState("");
 	const [message, setMessage] = useState("");
-	const [modal, setModal] = useState(false);
+	const [modal, setModal] = useState("");
 	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	useEffect(() => {
+		if (action === "edit") setName(searchParams.get("name"));
+	}, [action, searchParams]);
 	const nameHandler = (name) => {
 		if (name.length < 3) setMessage("Name must be more than 3 character");
 		if (name.length === 20)
@@ -18,26 +27,37 @@ const CategoryForm = () => {
 		if (name.length > 3 && name.length < 20) setMessage("");
 		setName(name);
 	};
-	const submitHandler = () => {
+	const storeHandler = () => {
 		const payload = { name };
-		console.log(qs.stringify(payload));
-		store(qs.stringify(payload)).then((result) => {
+		storeCategory(qs.stringify(payload)).then((result) => {
 			if (!result.error) {
-				setModal(true);
+				setModal("Category Created!");
 			} else {
 				console.log(result);
 			}
 		});
 	};
+	const updateHandler = () => {
+		const payload = { name };
+		updateCategory(qs.stringify(payload), searchParams.get("id")).then(
+			(result) => {
+				if (!result.error) {
+					setModal("Category Updated!");
+				} else {
+					console.log(result);
+				}
+			}
+		);
+	};
 	const moveToCategories = () => {
-		setModal(false);
+		setModal("");
 		return navigate("/admin/categories");
 	};
 	return (
 		<div className="w-full lg:w-9/12 bg-white rounded-3xl shadow-lg px-10 py-8 text-slate-700">
 			<Modal
 				icon={<ion-icon name="checkmark-circle"></ion-icon>}
-				message="Category created!"
+				message={modal}
 				type="success"
 				boolean={modal}
 				onClick={() => moveToCategories()}
@@ -76,7 +96,11 @@ const CategoryForm = () => {
 				text="Submit"
 				type="primary-filled"
 				additionalClass="lg:mr-4 mb-2 w-full md:mb-0"
-				onClick={() => submitHandler()}
+				onClick={() => {
+					return action === "create"
+						? storeHandler()
+						: updateHandler();
+				}}
 			/>
 		</div>
 	);
