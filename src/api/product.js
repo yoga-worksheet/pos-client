@@ -1,8 +1,11 @@
 import axios from "axios";
 
-const getProducts = async () => {
+const getProducts = async (query) => {
 	const result = await axios.get(
-		`${process.env.REACT_APP_API_HOST}/api/products`
+		`${process.env.REACT_APP_API_HOST}/api/products`,
+		{
+			params: query,
+		}
 	);
 	return result.data;
 };
