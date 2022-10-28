@@ -1,6 +1,8 @@
 import axios from "axios";
+import qs from "qs";
 
 const getProducts = async (query) => {
+	console.log(query);
 	const result = await axios.get(
 		`${process.env.REACT_APP_API_HOST}/api/products`,
 		{

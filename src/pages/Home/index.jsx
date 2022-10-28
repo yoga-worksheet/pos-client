@@ -11,17 +11,17 @@ import Pagination from "../../component/Pagination";
 const Home = () => {
 	const queries = useSelector((state) => state.product);
 	const dispatch = useDispatch();
-	const { currentPage, query, category, tag, skip } = queries;
+	const { currentPage, query, category, tags, skip, pages } = queries;
 	const [categories, setCategories] = useState([]);
-	const [tags, setTags] = useState([]);
+	const [tagList, setTagList] = useState([]);
 	const [products, setProducts] = useState([]);
 	const [count, setCount] = useState(0);
 	useEffect(() => {
 		getCategories().then((result) => setCategories(result));
-		getTags().then((result) => setTags(result));
+		getTags().then((result) => setTagList(result));
 		return () => {
 			setCategories([]);
-			setTags([]);
+			setTagList([]);
 		};
 	}, []);
 	useEffect(() => {
@@ -29,11 +29,10 @@ const Home = () => {
 			query,
 			category,
 			skip,
-			tags: tag,
+			tags,
 			limit: 8,
 		}).then((result) => {
 			setProducts(result.data);
-			setCount(result.count < 8 ? 1 : Math.ceil(result.count / 8));
 			dispatch(
 				setPages(result.count < 8 ? 1 : Math.ceil(result.count / 8))
 			);
@@ -41,15 +40,15 @@ const Home = () => {
 		return () => {
 			setProducts([]);
 		};
-	}, [skip, currentPage]);
+	}, [skip, currentPage, category, tags]);
 
 	return (
 		<div>
 			<div className="mt-0 lg:mt-12 mb-12 px-6 lg:px-12 w-full h-auto flex flex-col lg:flex-row flex-wrap justify-between">
-				<LeftSection tags={tags} categories={categories} />
+				<LeftSection tags={tagList} categories={categories} />
 				<ProductList products={products} />
 			</div>
-			<Pagination count={count} currentPage={queries.currentPage} />
+			<Pagination count={pages} currentPage={queries.currentPage} />
 		</div>
 	);
 };

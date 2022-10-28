@@ -20,7 +20,7 @@ const productReducer = (state = initialState, { type, payload }) => {
 		case FILTER_CATEGORY:
 			return { ...state, category: payload };
 		case FILTER_TAG:
-			return { ...state, tags: [payload] };
+			return { ...state, tags: payload };
 		case FILTER_SEARCH:
 			return { ...state, query: payload };
 		case SET_PAGES:
