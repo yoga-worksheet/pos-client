@@ -15,7 +15,6 @@ const Home = () => {
 	const [categories, setCategories] = useState([]);
 	const [tagList, setTagList] = useState([]);
 	const [products, setProducts] = useState([]);
-	const [count, setCount] = useState(0);
 	useEffect(() => {
 		getCategories().then((result) => setCategories(result));
 		getTags().then((result) => setTagList(result));

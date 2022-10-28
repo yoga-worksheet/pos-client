@@ -11,7 +11,7 @@ const Products = () => {
 	const [products, setProducts] = useState([]);
 	const [keyword, setKeyword] = useState("");
 	const [modal, setModal] = useState("");
-	const productsMapping = products.map((product, index) => [
+	const productsMapping = products.map((product) => [
 		<img
 			src={`${process.env.REACT_APP_API_HOST}/images/products/${product.image_url}`}
 			className=" max-h-24"

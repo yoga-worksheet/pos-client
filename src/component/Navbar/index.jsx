@@ -14,6 +14,12 @@ const Index = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
+	const cart = useSelector((state) => state.cart);
+	const totalItem = () => {
+		return cart
+			.map((cartItem) => cartItem.qty)
+			.reduce((result, item) => (result += item), 0);
+	};
 	let popUpStyle =
 		"absolute text-slate-700 transition ease-in-out -right-4 mt-2 ml-4 shadow-lg w-auto h-auto py-4 px-3 bg-[#ffffff] rounded-3xl";
 	const togglePopUp = () => {
@@ -150,8 +156,8 @@ const Index = () => {
 						}
 					>
 						<ion-icon name="cart"></ion-icon>
-						<span className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
-							5
+						<span className="absolute -right-2 -top-3 rounded-full bg-red-500 w-6 h-6 flex justify-center items-center top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
+							{totalItem()}
 						</span>
 					</NavLink>
 				) : (
