@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { idrFormatter } from "../../utils/formatter";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../features/Cart/action";
-import { getCarts } from "../../api/cart";
 import Table from "../../component/Table";
 import Button from "../../component/Button";
 
 const Cart = () => {
 	const carts = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
-	useEffect(() => {
-		getCarts().then((result) => console.log(result));
-	}, []);
+	const subtotal = carts
+		.map((cart) => ({
+			price: cart.price,
+			qty: cart.qty,
+		}))
+		.reduce((sub, item) => (sub += item.price * item.qty), 0);
 	const cartsMapping = carts.map((cart) => [
 		<img
 			src={`${process.env.REACT_APP_API_HOST}/images/products/${cart.image_url}`}
@@ -51,7 +53,7 @@ const Cart = () => {
 			</div>
 			<Table data={dataTable} />
 			<h1 className="text-2xl font-bold text-right my-10">
-				Subtotal : Rp. 2.400.000
+				Subtotal : {idrFormatter(subtotal)}
 			</h1>
 			<NavLink to="/choose-address">
 				<Button

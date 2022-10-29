@@ -1,4 +1,4 @@
-import { updateCart, getCarts } from "../../api/cart";
+import { updateCart } from "../../api/cart";
 import { ADD_TO_CART, REMOVE_FROM_CART, EMPTY_CART } from "./constants";
 
 const initialState = localStorage.getItem("cart")
