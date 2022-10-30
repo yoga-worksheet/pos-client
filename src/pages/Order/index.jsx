@@ -1,11 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { getOrders } from "../../api/order";
 import Button from "../../component/Button";
-import { NavLink } from "react-router-dom";
+import Table from "../../component/Table";
+import { idrFormatter } from "../../utils/formatter";
 
 const Orders = () => {
+	const navigate = useNavigate();
+	const [orders, setOrders] = useState([]);
+
+	const countTotal = (itemList) => {
+		return itemList.reduce(
+			(total, item) => (total += item.price * item.qty),
+			0
+		);
+	};
+	const ordersMapping = orders.map((order) => [
+		`# ${order.order_number}`,
+		idrFormatter(countTotal(order.order_items)),
+		order.status,
+		<Button
+			type="primary-filled"
+			text="Invoice"
+			additionalClass="px-3 py-1 text-xs"
+			onClick={() => invoiceHandler(order._id)}
+		/>,
+	]);
+
+	const invoiceHandler = (orderId) => {
+		navigate({
+			pathname: "/invoice",
+			search: createSearchParams({
+				id: orderId,
+			}).toString(),
+		});
+	};
+
+	useEffect(() => {
+		getOrders().then((result) => {
+			if (!result.error) {
+				setOrders(result.data);
+			} else {
+				console.log(result);
+			}
+		});
+	}, []);
+
+	const dataTable = {
+		headData: ["Order Number", "Total", "Status", "Invoice"],
+		bodyData: ordersMapping,
+	};
 	return (
 		<div className="w-full lg:w-9/12 bg-white rounded-3xl shadow-lg px-10 py-8 text-slate-700">
-			<table className="border-collapse w-full text-sm text-left">
+			<Table data={dataTable} />
+			{/* <table className="border-collapse w-full text-sm text-left">
 				<thead className="border-b">
 					<tr>
 						<th className="px-4 py-2">Order Id</th>
@@ -30,7 +79,7 @@ const Orders = () => {
 						</td>
 					</tr>
 				</tbody>
-			</table>
+			</table> */}
 		</div>
 	);
 };
