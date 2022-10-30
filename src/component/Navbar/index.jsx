@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useScrollPosition } from "../../hooks";
 import { logout } from "../../api/auth";
 import { userLogout } from "../../features/Auth/action";
+import { fetchAPI } from "../../features/Cart/action";
 import Modal from "../Modal";
 
 const Index = () => {
@@ -22,6 +23,11 @@ const Index = () => {
 	};
 	let popUpStyle =
 		"absolute text-slate-700 transition ease-in-out -right-4 mt-2 ml-4 shadow-lg w-auto h-auto py-4 px-3 bg-[#ffffff] rounded-3xl";
+
+	useEffect(() => {
+		dispatch(fetchAPI());
+	}, [dispatch]);
+
 	const togglePopUp = () => {
 		if (popUp) setPopUp(false);
 		else setPopUp(true);
@@ -45,7 +51,7 @@ const Index = () => {
 	};
 	const moveToHome = () => {
 		setModal(false);
-		togglePopUp();
+		menu ? toggleMenu() : togglePopUp();
 		navigate("/");
 	};
 	return (
@@ -107,6 +113,7 @@ const Index = () => {
 									<NavLink
 										to="/account/details"
 										className="hover:text-blue-500"
+										onClick={() => toggleMenu()}
 									>
 										Account
 									</NavLink>
@@ -201,6 +208,7 @@ const Index = () => {
 										<NavLink
 											to="/account/details"
 											className="hover:text-blue-500"
+											onClick={() => togglePopUp()}
 										>
 											Account
 										</NavLink>

@@ -1,5 +1,10 @@
 import { updateCart } from "../../api/cart";
-import { ADD_TO_CART, REMOVE_FROM_CART, EMPTY_CART } from "./constants";
+import {
+	ADD_TO_CART,
+	REMOVE_FROM_CART,
+	EMPTY_CART,
+	FETCH_CART,
+} from "./constants";
 
 const initialState = localStorage.getItem("cart")
 	? JSON.parse(localStorage.getItem("cart"))
@@ -37,7 +42,9 @@ const cartReducer = (state = initialState, { type, payload }) => {
 			localStorage.setItem("cart", JSON.stringify(carts));
 			return carts;
 		case EMPTY_CART:
-			return {};
+			return [];
+		case FETCH_CART:
+			return [...payload];
 		default:
 			return state;
 	}

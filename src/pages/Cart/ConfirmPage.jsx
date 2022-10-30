@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	createSearchParams,
 	NavLink,
@@ -9,6 +9,7 @@ import {
 import { getAddresses } from "../../api/address";
 import { idrFormatter } from "../../utils/formatter";
 import { storeOrder } from "../../api/order";
+import { fetchAPI } from "../../features/Cart/action";
 import qs from "qs";
 import Button from "../../component/Button";
 import Modal from "../../component/Modal";
@@ -18,7 +19,8 @@ const ConfirmPage = () => {
 	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.auth);
 	const carts = useSelector((state) => state.cart);
-	const [address, setAddress] = useState({});
+	const dispatch = useDispatch();
+	const [address, setAddress] = useState(null);
 	const [modal, setModal] = useState("");
 	const [orderId, setOrderId] = useState("");
 
@@ -56,6 +58,7 @@ const ConfirmPage = () => {
 
 	const moveToInvoice = () => {
 		setModal("");
+		dispatch(fetchAPI());
 		navigate({
 			pathname: "/invoice",
 			search: createSearchParams({
@@ -76,36 +79,42 @@ const ConfirmPage = () => {
 			<div className="border-b pb-4 mb-8 flex justify-between items-center">
 				<h2 className="font-bold text-xl">Confirmation Page</h2>
 			</div>
-			<table className="table-fix border-collapse w-full text-sm text-left">
-				<tbody>
-					<tr className="border-b">
-						<td className="px-4 py-2">Address</td>
-						<td className="px-4 py-2">
-							<span className=" block">{user.full_name}</span>
-							<span className="block font-semibold">
-								{address.name} ({address.detail})
-							</span>
-							{`${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}
-						</td>
-					</tr>
-					<tr className="border-b">
-						<td className="px-4 py-2">Sub total</td>
-						<td className="px-4 py-2">{idrFormatter(subtotal)}</td>
-					</tr>
-					<tr className="border-b">
-						<td className="px-4 py-2">Ongkir</td>
-						<td className="px-4 py-2">Rp. 25.000</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr className="border-b font-bold">
-						<td className="px-4 py-2">Total</td>
-						<td className="px-4 py-2">
-							{idrFormatter(subtotal + 25000)}
-						</td>
-					</tr>
-				</tfoot>
-			</table>
+			{address ? (
+				<table className="table-fix border-collapse w-full text-sm text-left">
+					<tbody>
+						<tr className="border-b">
+							<td className="px-4 py-2">Address</td>
+							<td className="px-4 py-2">
+								<span className=" block">{user.full_name}</span>
+								<span className="block font-semibold">
+									{address.name} ({address.detail})
+								</span>
+								{`${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}
+							</td>
+						</tr>
+						<tr className="border-b">
+							<td className="px-4 py-2">Sub total</td>
+							<td className="px-4 py-2">
+								{idrFormatter(subtotal)}
+							</td>
+						</tr>
+						<tr className="border-b">
+							<td className="px-4 py-2">Ongkir</td>
+							<td className="px-4 py-2">Rp. 25.000</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr className="border-b font-bold">
+							<td className="px-4 py-2">Total</td>
+							<td className="px-4 py-2">
+								{idrFormatter(subtotal + 25000)}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			) : (
+				"Loading"
+			)}
 			<div className="flex justify-between mt-12">
 				<NavLink to="/choose-address">
 					<Button type="warning-outlined" text="Back" />
