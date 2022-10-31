@@ -16,7 +16,7 @@ const Invoice = () => {
 		});
 	}, [searchParams]);
 	return (
-		<div className="mt-0 lg:mt-12 mb-12 px-20 py-10 w-full rounded-3xl bg-white shadow-lg text-slate-700">
+		<div className="mt-0 lg:mt-12 mb-12 md:mx-10 lg:mx-20 px-20 py-10 rounded-3xl bg-white shadow-lg text-slate-700">
 			<div className="border-b pb-4 mb-8 flex justify-between items-center">
 				<h2 className="font-bold text-xl">Invoice</h2>
 			</div>

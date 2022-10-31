@@ -1,13 +1,14 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Root from "./component/Root";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
+import Middleware from "./component/Middleware";
 import { Login, Register } from "./pages/Auth/pages";
 import { Account, Details } from "./pages/Account/pages";
 import { Cart, ConfirmPage, ChooseAddress } from "./pages/Cart/pages";
 import { Addresses, AddressForm } from "./pages/Address/pages";
 import { Orders, Invoice } from "./pages/Order/pages";
-import { NotFound } from "./pages/Error/pages";
+import { NotFound, Forbidden } from "./pages/Error/pages";
 import { Categories, CategoryForm } from "./pages/Admin/Category/pages";
 import { Products, ProductForm } from "./pages/Admin/Product/pages";
 import { Tags, TagForm } from "./pages/Admin/Tag/pages";
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "admin",
-				element: <Admin />,
+				element: (
+					<Middleware role="admin">
+						<Admin />
+					</Middleware>
+				),
 				children: [
 					{
 						path: "products",
@@ -59,7 +64,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "account",
-				element: <Account />,
+				element: (
+					<Middleware role="user">
+						<Account />
+					</Middleware>
+				),
 				children: [
 					{
 						path: "details",
@@ -102,13 +111,25 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "login",
-				element: <Login />,
+				element: localStorage.getItem("auth") ? (
+					<Navigate to="/" />
+				) : (
+					<Login />
+				),
 			},
 			{
 				path: "register",
-				element: <Register />,
+				element: localStorage.getItem("auth") ? (
+					<Navigate to="/" />
+				) : (
+					<Register />
+				),
 			},
 		],
+	},
+	{
+		path: "/forbidden",
+		element: <Forbidden />,
 	},
 ]);
 

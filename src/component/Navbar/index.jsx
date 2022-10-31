@@ -25,7 +25,9 @@ const Index = () => {
 		"absolute text-slate-700 transition ease-in-out -right-4 mt-2 ml-4 shadow-lg w-auto h-auto py-4 px-3 bg-[#ffffff] rounded-3xl";
 
 	useEffect(() => {
-		dispatch(fetchAPI());
+		if (localStorage.getItem("auth")) {
+			dispatch(fetchAPI());
+		}
 	}, [dispatch]);
 
 	const togglePopUp = () => {
