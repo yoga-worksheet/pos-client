@@ -37,10 +37,10 @@ const Addresses = () => {
 				id: _id,
 				name,
 				detail,
-				provinsi,
-				kabupaten,
-				kecamatan,
-				kelurahan,
+				provinsi: [provinsi.id, provinsi.name],
+				kabupaten: [kabupaten.id, kabupaten.name],
+				kecamatan: [kecamatan.id, kecamatan.name],
+				kelurahan: [kelurahan.id, kelurahan.name],
 			}).toString(),
 		});
 	};
@@ -60,7 +60,7 @@ const Addresses = () => {
 		headData: ["Name", "Address", "Action"],
 		bodyData: addresses.map((address, index) => [
 			address.name,
-			`${address.detail}, ${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`,
+			`(${address.detail}) ${address.kelurahan.name}, ${address.kecamatan.name}, ${address.kabupaten.name}, ${address.provinsi.name}`,
 			<div className="flex w-full space-x-2" key={index * 5}>
 				<Button
 					type="primary-outlined"

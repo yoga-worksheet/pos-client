@@ -84,8 +84,10 @@ const ChooseAddress = () => {
 							</td>
 							<td className="px-4 py-4">{address.name}</td>
 							<td className="px-4 py-4">
-								{`${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}{" "}
-								<span className="font-semibold">({address.detail})</span>
+								{`${address.kelurahan.name}, ${address.kecamatan.name}, ${address.kabupaten.name}, ${address.provinsi.name}`}{" "}
+								<span className="font-semibold">
+									({address.detail})
+								</span>
 							</td>
 						</tr>
 					))}

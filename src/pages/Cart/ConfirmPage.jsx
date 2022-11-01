@@ -89,7 +89,7 @@ const ConfirmPage = () => {
 								<span className="block font-semibold">
 									{address.name} ({address.detail})
 								</span>
-								{`${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}
+								{`${address.kelurahan.name}, ${address.kecamatan.name}, ${address.kabupaten.name}, ${address.provinsi.name}`}
 							</td>
 						</tr>
 						<tr className="border-b">

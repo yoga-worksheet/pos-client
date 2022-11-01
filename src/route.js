@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Root from "./component/Root";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
@@ -90,42 +90,34 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "invoice",
-				element: localStorage.getItem("auth") ? (
-					<Middleware>
+				element: (
+					<Middleware role="user">
 						<Invoice />
 					</Middleware>
-				) : (
-					<Navigate to="/auth/login" />
 				),
 			},
 			{
 				path: "cart",
-				element: localStorage.getItem("auth") ? (
-					<Middleware>
+				element: (
+					<Middleware role="user">
 						<Cart />
 					</Middleware>
-				) : (
-					<Navigate to="/auth/login" />
 				),
 			},
 			{
 				path: "choose-address",
-				element: localStorage.getItem("auth") ? (
-					<Middleware>
+				element: (
+					<Middleware role="user">
 						<ChooseAddress />
 					</Middleware>
-				) : (
-					<Navigate to="/auth/login" />
 				),
 			},
 			{
 				path: "confirm-page",
-				element: localStorage.getItem("auth") ? (
-					<Middleware>
+				element: (
+					<Middleware role="user">
 						<ConfirmPage />
 					</Middleware>
-				) : (
-					<Navigate to="/auth/login" />
 				),
 			},
 		],
@@ -135,19 +127,11 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "login",
-				element: localStorage.getItem("auth") ? (
-					<Navigate to="/" />
-				) : (
-					<Login />
-				),
+				element: <Login />,
 			},
 			{
 				path: "register",
-				element: localStorage.getItem("auth") ? (
-					<Navigate to="/" />
-				) : (
-					<Register />
-				),
+				element: <Register />,
 			},
 		],
 	},

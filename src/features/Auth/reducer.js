@@ -9,6 +9,7 @@ const authReducer = (state = initialState, { type, payload }) => {
 		case USER_LOGIN:
 			return { user: payload.user, token: payload.token };
 		case USER_LOGOUT:
+			localStorage.removeItem("auth");
 			return {};
 		default:
 			return state;

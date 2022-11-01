@@ -52,7 +52,7 @@ const Invoice = () => {
 									<span className="font-semibold block">
 										({invoice.delivery_address.detail})
 									</span>
-									{`${invoice.delivery_address.kelurahan}, ${invoice.delivery_address.kecamatan}, ${invoice.delivery_address.kabupaten}, ${invoice.delivery_address.provinsi}`}
+									{`${invoice.delivery_address.kelurahan.name}, ${invoice.delivery_address.kecamatan.name}, ${invoice.delivery_address.kabupaten.name}, ${invoice.delivery_address.provinsi.name}`}
 								</p>
 							</td>
 						</tr>

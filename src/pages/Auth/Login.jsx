@@ -7,16 +7,24 @@ import Modal from "../../component/Modal";
 import { login } from "../../api/auth";
 import { userLogin } from "../../features/Auth/action";
 import spiderman_ironman from "../../img/spiderman-ironman.png";
+import { useEffect } from "react";
 
 const Login = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const [modal, setModal] = useState("");
+	const [error, setError] = useState("");
 	const [data, setData] = useState({
 		email: "",
 		password: "",
 	});
-	const [modal, setModal] = useState("");
-	const [error, setError] = useState("");
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (localStorage.getItem("auth")) {
+			return navigate("/");
+		}
+	}, []);
+
 	const emailHandler = (event) => {
 		setData((prevState) => ({ ...prevState, email: event.target.value }));
 	};

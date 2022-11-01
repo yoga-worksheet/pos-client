@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 const Middleware = ({ children, role }) => {
 	const auth = useSelector((state) => state.auth);
 
-	if (JSON.stringify(auth) !== "{}") {
+	if (localStorage.getItem("auth")) {
 		if (auth.user.role !== role) {
 			return <Navigate to="/forbidden" />;
 		} else {

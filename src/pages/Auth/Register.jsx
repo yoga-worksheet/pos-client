@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../../component/Button";
 import deadpool from "../../img/deadpool.jpg";
 import { useState } from "react";
@@ -8,15 +8,22 @@ import { useNavigate, NavLink } from "react-router-dom";
 import qs from "qs";
 
 const Register = () => {
+	const navigate = useNavigate();
+	const [modal, setModal] = useState("");
+	const [error, setError] = useState("");
 	const [data, setData] = useState({
 		name: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
 	});
-	const [modal, setModal] = useState("");
-	const [error, setError] = useState("");
-	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (localStorage.getItem("auth")) {
+			return navigate("/");
+		}
+	}, []);
+
 	const nameHandler = (event) => {
 		setData((prevState) => ({ ...prevState, name: event.target.value }));
 	};

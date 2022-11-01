@@ -25,22 +25,69 @@ const AddressForm = () => {
 	const [districts, setDistricts] = useState([]);
 	const [subDistricts, setSubDistricts] = useState([]);
 	const [modal, setModal] = useState("");
+	const [error, setError] = useState("");
 	const [payload, setPayload] = useState({
 		name: "",
 		detail: "",
-		provinsi: "",
-		kabupaten: "",
-		kecamatan: "",
-		kelurahan: "",
+		provinsi: {
+			id: 0,
+			name: "",
+		},
+		kabupaten: {
+			id: 0,
+			name: "",
+		},
+		kecamatan: {
+			id: 0,
+			name: "",
+		},
+		kelurahan: {
+			id: 0,
+			name: "",
+		},
 	});
+
 	useEffect(() => {
 		const fetchProvinces = async () => {
-			const result = await getProvinces();
-			setProvinces([...result]);
+			const provincesResult = await getProvinces();
+			setProvinces([...provincesResult]);
+			if (action === "edit") {
+				const regenciesResult = await getRegencies(
+					searchParams.getAll("provinsi")[0]
+				);
+				const districtsResult = await getDistricts(
+					searchParams.getAll("kabupaten")[0]
+				);
+				const subDistrictsResult = await getSubDistricts(
+					searchParams.getAll("kecamatan")[0]
+				);
+				setRegencies([...regenciesResult]);
+				setDistricts([...districtsResult]);
+				setSubDistricts([...subDistrictsResult]);
+				setPayload((prevState) => ({
+					...prevState,
+					name: searchParams.get("name"),
+					detail: searchParams.get("detail"),
+					provinsi: {
+						id: searchParams.getAll("provinsi")[0],
+						name: searchParams.getAll("provinsi")[1],
+					},
+					kabupaten: {
+						id: searchParams.getAll("kabupaten")[0],
+						name: searchParams.getAll("kabupaten")[1],
+					},
+					kecamatan: {
+						id: searchParams.getAll("kecamatan")[0],
+						name: searchParams.getAll("kecamatan")[1],
+					},
+					kelurahan: {
+						id: searchParams.getAll("kelurahan")[0],
+						name: searchParams.getAll("kelurahan")[1],
+					},
+				}));
+			}
 		};
 		fetchProvinces();
-		if (action === "edit")
-			provinceHandler(payload.provinsi);
 		return () => {
 			setProvinces([]);
 		};
@@ -52,10 +99,6 @@ const AddressForm = () => {
 				...prevState,
 				name: searchParams.get("name"),
 				detail: searchParams.get("detail"),
-				provinsi: searchParams.get("provinsi"),
-				kabupaten: searchParams.get("kabupaten"),
-				kecamatan: searchParams.get("kecamatan"),
-				kelurahan: searchParams.get("kelurahan"),
 			}));
 		}
 	}, [action, searchParams]);
@@ -69,25 +112,46 @@ const AddressForm = () => {
 	};
 
 	const provinceHandler = (name) => {
-		const id = provinces.filter((province) => province.nama === name)[0].id;
-		setPayload((prevState) => ({ ...prevState, provinsi: name }));
-		getRegencies(id).then((result) => setRegencies(result));
+		const selected = provinces.filter(
+			(province) => province.nama === name
+		)[0];
+		setPayload((prevState) => ({
+			...prevState,
+			provinsi: { id: selected.id, name: selected.nama },
+		}));
+		getRegencies(selected.id).then((result) => setRegencies(result));
 	};
 
 	const regencyHandler = (name) => {
-		const id = regencies.filter((regency) => regency.nama === name)[0].id;
-		setPayload((prevState) => ({ ...prevState, kabupaten: name }));
-		getDistricts(id).then((result) => setDistricts(result));
+		const selected = regencies.filter(
+			(regency) => regency.nama === name
+		)[0];
+		setPayload((prevState) => ({
+			...prevState,
+			kabupaten: { id: selected.id, name: selected.nama },
+		}));
+		getDistricts(selected.id).then((result) => setDistricts(result));
 	};
 
 	const districtHandler = (name) => {
-		const id = districts.filter((district) => district.nama === name)[0].id;
-		setPayload((prevState) => ({ ...prevState, kecamatan: name }));
-		getSubDistricts(id).then((result) => setSubDistricts(result));
+		const selected = districts.filter(
+			(district) => district.nama === name
+		)[0];
+		setPayload((prevState) => ({
+			...prevState,
+			kecamatan: { id: selected.id, name: selected.nama },
+		}));
+		getSubDistricts(selected.id).then((result) => setSubDistricts(result));
 	};
 
 	const subDistrictHandler = (name) => {
-		setPayload((prevState) => ({ ...prevState, kelurahan: name }));
+		const selected = subDistricts.filter(
+			(subDistrict) => subDistrict.nama === name
+		)[0];
+		setPayload((prevState) => ({
+			...prevState,
+			kelurahan: { id: selected.id, name: selected.nama },
+		}));
 	};
 
 	const storeHandler = () => {
@@ -95,34 +159,45 @@ const AddressForm = () => {
 			if (!result.error) {
 				setModal("Address Created!");
 			} else {
-				console.log(result);
+				setError(result.message);
 			}
 		});
 	};
 
 	const updateHandler = () => {
-		console.log("update nih");
-		// updateAddress(payload).then((result) => {
-		// 	if (!result.error) {
-		// 		setModal("Address Created!");
-		// 	} else {
-		// 		console.log(result);
-		// 	}
-		// });
+		updateAddress(qs.stringify(payload), searchParams.get("id")).then(
+			(result) => {
+				if (!result.error) {
+					setModal("Address Updated!");
+				} else {
+					setError(result.message);
+				}
+			}
+		);
 	};
 
 	const moveToAddresses = () => {
 		setModal("");
-		return navigate("/account/addresses");
+		if (error) {
+			setError("");
+		} else {
+			return navigate("/account/addresses");
+		}
 	};
 
 	return (
 		<div className="w-full lg:w-9/12 bg-white rounded-3xl shadow-lg px-10 py-8 text-slate-700">
 			<Modal
-				icon={<ion-icon name="checkmark-circle"></ion-icon>}
-				message={modal}
-				type="success"
-				boolean={modal}
+				icon={
+					modal ? (
+						<ion-icon name="checkmark-circle"></ion-icon>
+					) : (
+						<ion-icon name="warning"></ion-icon>
+					)
+				}
+				message={modal || error}
+				type={modal ? "success" : "warning"}
+				boolean={modal || error}
 				onClick={() => moveToAddresses()}
 			/>
 			<div className="border-b pb-4 mb-8 flex justify-between items-center">
@@ -176,9 +251,7 @@ const AddressForm = () => {
 						<select
 							name="provinsi"
 							id="provinsi"
-							value={
-								payload.provinsi ? payload.provinsi : "select"
-							}
+							value={payload.provinsi.name || "select"}
 							onChange={(event) =>
 								provinceHandler(event.target.value)
 							}
@@ -203,12 +276,12 @@ const AddressForm = () => {
 							Kota/Kabupaten
 						</label>
 						<select
-							disabled={!payload.provinsi && action === "create"}
+							disabled={
+								!payload.provinsi.name && action === "create"
+							}
 							name="kabkot"
 							id="kabkot"
-							value={
-								payload.kabupaten ? payload.kabupaten : "select"
-							}
+							value={payload.kabupaten.name || "select"}
 							onChange={(event) =>
 								regencyHandler(event.target.value)
 							}
@@ -233,12 +306,12 @@ const AddressForm = () => {
 							Kecamatan
 						</label>
 						<select
-							disabled={!payload.kabupaten}
+							disabled={
+								!payload.kabupaten.name && action === "create"
+							}
 							name="kecamatan"
 							id="kecamatan"
-							value={
-								payload.kecamatan ? payload.kecamatan : "select"
-							}
+							value={payload.kecamatan.name || "select"}
 							onChange={(event) =>
 								districtHandler(event.target.value)
 							}
@@ -263,12 +336,12 @@ const AddressForm = () => {
 							Kelurahan
 						</label>
 						<select
-							disabled={!payload.kecamatan}
+							disabled={
+								!payload.kecamatan.name && action === "create"
+							}
 							name="kelurahan"
 							id="kelurahan"
-							value={
-								payload.kelurahan ? payload.kelurahan : "select"
-							}
+							value={payload.kelurahan.name || "select"}
 							onChange={(event) =>
 								subDistrictHandler(event.target.value)
 							}

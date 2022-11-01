@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useScrollPosition } from "../../hooks";
 import { logout } from "../../api/auth";
 import { userLogout } from "../../features/Auth/action";
-import { fetchAPI } from "../../features/Cart/action";
+import { emptyCart, fetchAPI } from "../../features/Cart/action";
 import { filterBySearch } from "../../features/Product/action";
 import Modal from "../Modal";
 import { useCallback } from "react";
@@ -66,9 +66,10 @@ const Index = () => {
 		if (localStorage.getItem("auth")) {
 			logout().then((result) => {
 				if (!result.error) {
-					localStorage.removeItem("auth");
 					dispatch(userLogout());
-					setModal(true);
+					dispatch(emptyCart());
+					menu ? toggleMenu() : togglePopUp();
+					navigate("/");
 				} else {
 					console.log(result);
 				}
@@ -76,11 +77,11 @@ const Index = () => {
 		}
 	};
 
-	const moveToHome = () => {
-		setModal(false);
-		menu ? toggleMenu() : togglePopUp();
-		navigate("/");
-	};
+	// const moveToHome = () => {
+	// 	menu ? toggleMenu() : togglePopUp();
+	// 	navigate("/");
+	// 	setModal(false);
+	// };
 
 	return (
 		<div
@@ -90,7 +91,7 @@ const Index = () => {
 					: "w-full transition sticky top-0 mt-8 flex flex-col lg:flex-row justify-between lg:items-center text-slate-700 px-20 py-4"
 			}
 		>
-			{modal && (
+			{/* {modal && (
 				<Modal
 					icon={<ion-icon name="checkmark-circle"></ion-icon>}
 					message="Logout Successful!"
@@ -98,7 +99,7 @@ const Index = () => {
 					boolean={modal}
 					onClick={() => moveToHome()}
 				/>
-			)}
+			)} */}
 			<div className="flex justify-between">
 				<h1
 					className={
@@ -138,15 +139,27 @@ const Index = () => {
 					<ul className="font-light text-normal space-y-2">
 						{user ? (
 							<>
-								<li className="border-b py-2 px-6">
-									<NavLink
-										to="/account/details"
-										className="hover:text-blue-500"
-										onClick={() => toggleMenu()}
-									>
-										Account
-									</NavLink>
-								</li>
+								{user.role === "user" ? (
+									<li className="border-b py-2 px-6">
+										<NavLink
+											to="/account/details"
+											className="hover:text-blue-500"
+											onClick={() => toggleMenu()}
+										>
+											Account
+										</NavLink>
+									</li>
+								) : (
+									<li className="border-b py-2 px-6">
+										<NavLink
+											to="/admin/products"
+											className="hover:text-blue-500"
+											onClick={() => toggleMenu()}
+										>
+											Dashboard
+										</NavLink>
+									</li>
+								)}
 								<li className="py-2 px-6">
 									<button
 										className="hover:text-blue-500"
@@ -182,7 +195,7 @@ const Index = () => {
 				""
 			)}
 			<div className="flex items-center space-x-10">
-				{user ? (
+				{user && user.role === "user" ? (
 					<NavLink
 						to="/cart"
 						className={
@@ -233,15 +246,27 @@ const Index = () => {
 						<ul className="font-light text-normal space-y-2 text-slate-700">
 							{user ? (
 								<>
-									<li className="border-b py-2 px-6">
-										<NavLink
-											to="/account/details"
-											className="hover:text-blue-500"
-											onClick={() => togglePopUp()}
-										>
-											Account
-										</NavLink>
-									</li>
+									{user.role === "user" ? (
+										<li className="border-b py-2 px-6">
+											<NavLink
+												to="/account/details"
+												className="hover:text-blue-500"
+												onClick={() => togglePopUp()}
+											>
+												Account
+											</NavLink>
+										</li>
+									) : (
+										<li className="border-b py-2 px-6">
+											<NavLink
+												to="/admin/products"
+												className="hover:text-blue-500"
+												onClick={() => togglePopUp()}
+											>
+												Dashboard
+											</NavLink>
+										</li>
+									)}
 									<li className="py-2 px-6">
 										<button
 											className="hover:text-blue-500"
