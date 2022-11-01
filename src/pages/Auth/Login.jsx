@@ -13,7 +13,8 @@ const Login = () => {
 		email: "",
 		password: "",
 	});
-	const [modal, setModal] = useState(false);
+	const [modal, setModal] = useState("");
+	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const emailHandler = (event) => {
@@ -37,26 +38,30 @@ const Login = () => {
 					JSON.stringify({ user: result.user, token: result.token })
 				);
 				dispatch(userLogin(result));
-				setModal(true);
+				setModal("Login Successful!");
 			} else {
-				console.log(result);
+				setError(result.message);
 			}
 		});
 	};
 	const moveToHome = () => {
-		setModal(false);
-		return navigate("/");
+		setModal("");
+		if (error) {
+			setError("");
+		} else {
+			return navigate("/");
+		}
 	};
 	return (
 		<div className="flex min-h-screen justify-center items-center font-Poppins text-zinc-800">
 			<Modal
 				icon={<ion-icon name="checkmark-circle"></ion-icon>}
-				message="Login Successful!"
-				type="success"
-				boolean={modal}
+				message={modal || error}
+				type={modal ? "success" : "warning"}
+				boolean={modal || error}
 				onClick={() => moveToHome()}
 			/>
-			<div className="2xl:container flex bg-[#ffffff] lg:max-h-96 w-8/12 shadow-lg rounded-2xl">
+			<div className="2xl:container flex bg-[#ffffff]  w-8/12 shadow-lg rounded-2xl">
 				<div
 					hidden
 					className="overflow-hidden lg:block rounded-tl-2xl rounded-bl-2xl flex-1"
@@ -96,25 +101,34 @@ const Login = () => {
 								className="w-full bg-zinc-100 py-2 px-4 rounded-3xl font-semibold transition ease-in-out border-2 border-transparent focus:border-blue-600 focus:outline-none"
 							/>
 						</div>
-						<div className="flex flex-wrap mt-6 md:space-x-2">
-							<Button
-								text="Login"
-								type="primary-filled"
-								additionalClass="mb-2 w-full md:w-auto md:mb-0"
-								onClick={() => submitHandler()}
-							/>
-							<NavLink
-								to="/auth/register"
-								className="w-full md:w-auto"
-							>
-								<Button
-									text="Register"
-									type="secondary-filled"
-									additionalClass="mb-2 w-full md:w-auto md:mb-0"
-								/>
-							</NavLink>
-						</div>
 					</div>
+					<div className="flex flex-wrap mt-2 md:space-x-2">
+						<Button
+							text="Login"
+							type="primary-filled"
+							additionalClass="mb-2 w-full md:w-auto md:mb-0"
+							onClick={() => submitHandler()}
+						/>
+						<NavLink
+							to="/auth/register"
+							className="w-full md:w-auto"
+						>
+							<Button
+								text="Register"
+								type="secondary-filled"
+								additionalClass="mb-2 w-full md:w-auto md:mb-0"
+							/>
+						</NavLink>
+					</div>
+					<p className="text-sm font-light mt-6">
+						Click here to{" "}
+						<NavLink
+							to="/"
+							className="transition ease-in-out text-blue-300 hover:text-blue-500"
+						>
+							Back to Home
+						</NavLink>
+					</p>
 				</div>
 			</div>
 		</div>

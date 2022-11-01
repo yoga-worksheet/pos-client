@@ -14,7 +14,8 @@ const Register = () => {
 		password: "",
 		confirmPassword: "",
 	});
-	const [modal, setModal] = useState(false);
+	const [modal, setModal] = useState("");
+	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const nameHandler = (event) => {
 		setData((prevState) => ({ ...prevState, name: event.target.value }));
@@ -43,13 +44,13 @@ const Register = () => {
 		});
 	};
 	const dataChecker = (data) => {
-		if (
+		const notValid =
 			!data.name ||
 			!data.email ||
 			!data.password ||
 			!data.confirmPassword ||
-			data.password !== data.confirmPassword
-		) {
+			data.password !== data.confirmPassword;
+		if (notValid) {
 			return true;
 		}
 		return false;
@@ -63,8 +64,10 @@ const Register = () => {
 		register(qs.stringify(payload))
 			.then((result) => {
 				if (!result.error) {
-					setModal(true);
+					setModal("Register Successful!");
 					reset();
+				} else {
+					setError(result.message);
 				}
 			})
 			.catch((error) => {
@@ -72,16 +75,20 @@ const Register = () => {
 			});
 	};
 	const moveToLogin = () => {
-		setModal(false);
-		return navigate("/auth/login");
+		setModal("");
+		if (error) {
+			setError("");
+		} else {
+			return navigate("/auth/login");
+		}
 	};
 	return (
 		<>
 			<Modal
 				icon={<ion-icon name="checkmark-circle"></ion-icon>}
-				message="Register Successful!"
-				type="success"
-				boolean={modal}
+				message={modal || error}
+				type={modal ? "success" : "warning"}
+				boolean={modal || error}
 				onClick={() => moveToLogin()}
 			/>
 			<div className="flex min-h-screen justify-center items-center font-Poppins text-zinc-800">
@@ -171,7 +178,8 @@ const Register = () => {
 								) : (
 									""
 								)}
-								{data.password.length < 8 ? (
+								{data.password.length &&
+								data.password.length < 8 ? (
 									<span className="text-red-500 text-sm">
 										* Password minimum 8 character
 									</span>
@@ -179,23 +187,35 @@ const Register = () => {
 									""
 								)}
 							</div>
-							<div className="flex flex-wrap mt-6 lg:space-x-2">
-								<Button
-									text="Register"
-									type="primary-filled"
-									additionalClass="mb-2 w-full md:w-auto md:mb-0"
-									disabled={dataChecker(data)}
-									onClick={() => submitHandler()}
-								/>
-								<NavLink to="/auth/login" className="w-full md:w-auto">
-									<Button
-										text="Login"
-										type="secondary-filled"
-										additionalClass="mb-2 w-full md:w-auto md:mb-0"
-									/>
-								</NavLink>
-							</div>
 						</div>
+						<div className="flex flex-wrap mt-2 md:space-x-2">
+							<Button
+								text="Register"
+								type="primary-filled"
+								additionalClass="mb-2 w-full md:w-auto md:mb-0"
+								disabled={dataChecker(data)}
+								onClick={() => submitHandler()}
+							/>
+							<NavLink
+								to="/auth/login"
+								className="w-full md:w-auto"
+							>
+								<Button
+									text="Login"
+									type="secondary-filled"
+									additionalClass="mb-2 w-full md:w-auto md:mb-0"
+								/>
+							</NavLink>
+						</div>
+						<p className="text-sm font-light mt-6">
+							Click here to{" "}
+							<NavLink
+								to="/"
+								className="transition ease-in-out text-blue-300 hover:text-blue-500"
+							>
+								Back to Home
+							</NavLink>
+						</p>
 					</div>
 				</div>
 			</div>

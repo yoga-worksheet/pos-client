@@ -90,19 +90,43 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "invoice",
-				element: <Invoice />,
+				element: localStorage.getItem("auth") ? (
+					<Middleware>
+						<Invoice />
+					</Middleware>
+				) : (
+					<Navigate to="/auth/login" />
+				),
 			},
 			{
 				path: "cart",
-				element: <Cart />,
+				element: localStorage.getItem("auth") ? (
+					<Middleware>
+						<Cart />
+					</Middleware>
+				) : (
+					<Navigate to="/auth/login" />
+				),
 			},
 			{
 				path: "choose-address",
-				element: <ChooseAddress />,
+				element: localStorage.getItem("auth") ? (
+					<Middleware>
+						<ChooseAddress />
+					</Middleware>
+				) : (
+					<Navigate to="/auth/login" />
+				),
 			},
 			{
 				path: "confirm-page",
-				element: <ConfirmPage />,
+				element: localStorage.getItem("auth") ? (
+					<Middleware>
+						<ConfirmPage />
+					</Middleware>
+				) : (
+					<Navigate to="/auth/login" />
+				),
 			},
 		],
 	},

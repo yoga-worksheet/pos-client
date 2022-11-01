@@ -11,7 +11,7 @@ import Pagination from "../../component/Pagination";
 const Home = () => {
 	const queries = useSelector((state) => state.product);
 	const dispatch = useDispatch();
-	const { currentPage, query, category, tags, skip, pages } = queries;
+	const { currentPage, query: q, category, tags, skip, pages } = queries;
 	const [categories, setCategories] = useState([]);
 	const [tagList, setTagList] = useState([]);
 	const [products, setProducts] = useState([]);
@@ -25,7 +25,7 @@ const Home = () => {
 	}, []);
 	useEffect(() => {
 		getProducts({
-			query,
+			q,
 			category,
 			skip,
 			tags,
@@ -39,7 +39,7 @@ const Home = () => {
 		return () => {
 			setProducts([]);
 		};
-	}, [skip, currentPage, category, tags]);
+	}, [skip, currentPage, category, tags, q]);
 
 	return (
 		<div>

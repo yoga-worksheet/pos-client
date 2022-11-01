@@ -5,22 +5,38 @@ import { useScrollPosition } from "../../hooks";
 import { logout } from "../../api/auth";
 import { userLogout } from "../../features/Auth/action";
 import { fetchAPI } from "../../features/Cart/action";
+import { filterBySearch } from "../../features/Product/action";
 import Modal from "../Modal";
+import { useCallback } from "react";
 
 const Index = () => {
-	const [popUp, setPopUp] = useState(false);
-	const [menu, setMenu] = useState(false);
-	const [modal, setModal] = useState(false);
-	const scrollPosition = useScrollPosition();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
 	const cart = useSelector((state) => state.cart);
+	const scrollPosition = useScrollPosition();
+	const [popUp, setPopUp] = useState(false);
+	const [menu, setMenu] = useState(false);
+	const [modal, setModal] = useState(false);
+
 	const totalItem = () => {
 		return cart
 			.map((cartItem) => cartItem.qty)
 			.reduce((result, item) => (result += item), 0);
 	};
+
+	const debounce = (func) => {
+		let timer;
+		return function (...args) {
+			const context = this;
+			if (timer) clearTimeout(timer);
+			timer = setTimeout(() => {
+				timer = null;
+				func.apply(context, args);
+			}, 500);
+		};
+	};
+
 	let popUpStyle =
 		"absolute text-slate-700 transition ease-in-out -right-4 mt-2 ml-4 shadow-lg w-auto h-auto py-4 px-3 bg-[#ffffff] rounded-3xl";
 
@@ -34,10 +50,18 @@ const Index = () => {
 		if (popUp) setPopUp(false);
 		else setPopUp(true);
 	};
+
 	const toggleMenu = () => {
 		if (menu) setMenu(false);
 		else setMenu(true);
 	};
+
+	const setFilterBySearch = (keyword) => {
+		dispatch(filterBySearch(keyword));
+	};
+
+	const keywordHandler = useCallback(debounce(setFilterBySearch), []);
+
 	const logoutHandler = () => {
 		if (localStorage.getItem("auth")) {
 			logout().then((result) => {
@@ -51,11 +75,13 @@ const Index = () => {
 			});
 		}
 	};
+
 	const moveToHome = () => {
 		setModal(false);
 		menu ? toggleMenu() : togglePopUp();
 		navigate("/");
 	};
+
 	return (
 		<div
 			className={
@@ -104,6 +130,7 @@ const Index = () => {
 					type="text"
 					className="bg-transparent w-full font-bold focus:outline-none placeholder:font-light placeholder:italic"
 					placeholder="Search marvel, spiderman, naruto ..."
+					onChange={(event) => keywordHandler(event.target.value)}
 				/>
 			</div>
 			{menu ? (
