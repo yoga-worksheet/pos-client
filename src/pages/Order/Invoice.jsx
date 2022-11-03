@@ -6,6 +6,7 @@ import { idrFormatter } from "../../utils/formatter";
 const Invoice = () => {
 	const [searchParams] = useSearchParams();
 	const [invoice, setInvoice] = useState(null);
+
 	useEffect(() => {
 		getInvoice(searchParams.get("id")).then((result) => {
 			if (!result.error) {
@@ -15,6 +16,7 @@ const Invoice = () => {
 			}
 		});
 	}, [searchParams]);
+
 	return (
 		<div className="mt-0 lg:mt-12 mb-12 md:mx-10 lg:mx-20 px-20 py-10 rounded-3xl bg-white shadow-lg text-slate-700">
 			<div className="border-b pb-4 mb-8 flex justify-between items-center">
@@ -36,6 +38,17 @@ const Invoice = () => {
 							</td>
 						</tr>
 						<tr className="border-b">
+							<td className="px-4 py-2">Order Items</td>
+							<td className="px-4 py-2">
+								{invoice.order.order_items.map((item) => (
+									<p>
+										- <span className="font-bold">{item.name}</span> x {item.qty} Pcs @{" "}
+										{idrFormatter(item.price)}
+									</p>
+								))}
+							</td>
+						</tr>
+						<tr className="border-b">
 							<td className="px-4 py-2">Total Amount</td>
 							<td className="px-4 py-2">
 								{idrFormatter(invoice.total)}
@@ -44,8 +57,11 @@ const Invoice = () => {
 						<tr className="border-b">
 							<td className="px-4 py-2">Billed to</td>
 							<td className="px-4 py-2">
-								<p>
-									{invoice.user.full_name} <br />
+								<p className="mb-2">
+									<span className="font-bold">
+										{invoice.user.full_name}
+									</span>{" "}
+									<br />
 									{invoice.user.email}
 								</p>
 								<p>
@@ -59,8 +75,13 @@ const Invoice = () => {
 						<tr className="border-b">
 							<td className="px-4 py-2">Payment to</td>
 							<td className="px-4 py-2">
-								<p>Bank BCA</p>
-								<p>No Rek. 122001282128 a/n Fulan bin Fulan</p>
+								<p className="font-bold">Bank BCA</p>
+								<p>
+									No Rek. 122001282128 a/n{" "}
+									<span className="font-bold">
+										Fulan bin Fulan
+									</span>
+								</p>
 							</td>
 						</tr>
 					</tbody>
