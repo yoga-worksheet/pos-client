@@ -46,12 +46,13 @@ const Tags = () => {
 		}, 250);
 	};
 
-	const editHandler = ({ _id, name }) => {
+	const editHandler = ({ _id, name, category }) => {
 		navigate({
 			pathname: "/admin/tag-form/edit",
 			search: createSearchParams({
 				id: _id,
 				name,
+				category,
 			}).toString(),
 		});
 	};

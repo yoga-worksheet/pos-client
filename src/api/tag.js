@@ -7,6 +7,13 @@ const getTags = async () => {
 	return result.data;
 };
 
+const getTagsByCategory = async (category_id) => {
+	const result = await axios.get(
+		`${process.env.REACT_APP_API_HOST}/api/tags/${category_id}`
+	);
+	return result.data;
+};
+
 const storeTag = async (payload) => {
 	const result = await axios.post(
 		`${process.env.REACT_APP_API_HOST}/api/tag`,
@@ -51,4 +58,4 @@ const destroyTag = async (id) => {
 	return result.data;
 };
 
-export { storeTag, getTags, updateTag, destroyTag };
+export { storeTag, getTags, getTagsByCategory, updateTag, destroyTag };

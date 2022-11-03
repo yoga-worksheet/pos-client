@@ -6,6 +6,7 @@ import Modal from "../../component/Modal";
 
 const ProductItem = ({ product }) => {
 	const dispatch = useDispatch();
+	const { user } = useSelector((state) => state.auth);
 	const [modal, setModal] = useState("");
 	const addToCartHandler = () => {
 		const { _id, name, price, image_url } = product;
@@ -16,14 +17,18 @@ const ProductItem = ({ product }) => {
 			image_url,
 			qty: 1,
 		};
-		if (!localStorage.getItem("auth")) {
-			setModal("You must log in before using cart!");
+		if (!localStorage.getItem("auth") || user.role === "admin") {
+			setModal(
+				user.role === "admin"
+					? "You must log in as a user!"
+					: "You must log in before using cart!"
+			);
 		} else {
 			dispatch(addToCart(payload));
 		}
 	};
 	return (
-		<div className="flex flex-col justify-between bg-[#ffffff] text-slate-600 rounded-3xl p-4 shadow-lg">
+		<div className="flex flex-col justify-between bg-[#ffffff] text-slate-600 rounded-3xl p-4 shadow-lg h-96 lg:h-80">
 			<Modal
 				icon={<ion-icon name="warning"></ion-icon>}
 				message={modal}
@@ -35,7 +40,7 @@ const ProductItem = ({ product }) => {
 				<img
 					src={`${process.env.REACT_APP_API_HOST}/images/products/${product.image_url}`}
 					alt={product.name}
-					className="object-cover"
+					className="object-cover object-center"
 				/>
 			</div>
 			<div>

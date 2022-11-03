@@ -5,9 +5,15 @@ import { idrFormatter } from "../../../utils/formatter";
 import Table from "../../../component/Table";
 import Button from "../../../component/Button";
 import Modal from "../../../component/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { setPages } from "../../../features/Product/action";
+import Pagination from "../../../component/Pagination";
 
 const Products = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const queries = useSelector((state) => state.product);
+	const { currentPage, query: q, category, tags, skip, pages } = queries;
 	const [products, setProducts] = useState([]);
 	const [keyword, setKeyword] = useState("");
 	const [modal, setModal] = useState("");
@@ -41,12 +47,28 @@ const Products = () => {
 			setProducts(result.data);
 		});
 
+	// useEffect(() => {
+	// 	fetchProducts();
+	// 	return () => {
+	// 		setProducts([]);
+	// 	};
+	// }, []);
+
 	useEffect(() => {
-		fetchProducts();
+		getProducts({
+			skip,
+			tags,
+			limit: 5,
+		}).then((result) => {
+			setProducts(result.data);
+			dispatch(
+				setPages(result.count < 5 ? 1 : Math.ceil(result.count / 5))
+			);
+		});
 		return () => {
 			setProducts([]);
 		};
-	}, []);
+	}, [skip, currentPage]);
 
 	const searchHandler = (keyword) => {
 		setTimeout(() => {
@@ -108,6 +130,11 @@ const Products = () => {
 				</div>
 			</div>
 			<Table data={dataTable} />
+			<Pagination
+				count={pages}
+				currentPage={queries.currentPage}
+				perPage={5}
+			/>
 		</div>
 	);
 };

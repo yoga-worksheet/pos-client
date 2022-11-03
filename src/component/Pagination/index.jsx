@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../features/Product/action";
 
-const Pagination = ({ count, currentPage }) => {
+const Pagination = ({ count, currentPage, perPage = 8 }) => {
 	const dispatch = useDispatch();
 	const [position, setPosition] = useState(1);
 	const [pages, setPages] = useState([]);
@@ -20,7 +20,12 @@ const Pagination = ({ count, currentPage }) => {
 	}, [count]);
 
 	useEffect(() => {
-		dispatch(setCurrentPage({ page: position, skip: position * 8 - 8 }));
+		dispatch(
+			setCurrentPage({
+				page: position,
+				skip: position * perPage - perPage,
+			})
+		);
 	}, [position]);
 
 	const pageHandler = (page) => {

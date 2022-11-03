@@ -5,7 +5,7 @@ import {
 	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
-import { getTags } from "../../../api/tag";
+import { getTagsByCategory } from "../../../api/tag";
 import { getCategories } from "../../../api/category";
 import { storeProduct, updateProduct, findProduct } from "../../../api/product";
 import Button from "../../../component/Button";
@@ -29,16 +29,14 @@ const ProductForm = () => {
 
 	useEffect(() => {
 		getCategories().then((result) => setCategories(result));
-		getTags().then((result) => setTags(result));
 		return () => {
 			setCategories([]);
-			setTags([]);
 		};
 	}, []);
 
 	useEffect(() => {
 		if (action === "edit") {
-			findProduct(searchParams.get("id")).then((result) =>
+			findProduct(searchParams.get("id")).then((result) => {
 				setProduct((prevState) => ({
 					...prevState,
 					name: result.name,
@@ -46,8 +44,11 @@ const ProductForm = () => {
 					price: parseInt(result.price),
 					category: result.category.name,
 					tags: [...result.tags.map((tag) => tag.name)],
-				}))
-			);
+				}));
+				getTagsByCategory(result.category._id).then((res) =>
+					setTags([...res])
+				);
+			});
 		}
 	}, [action, searchParams]);
 
@@ -74,10 +75,12 @@ const ProductForm = () => {
 	};
 
 	const categoryHandler = (category) => {
+		const id = categories.filter((item) => item.name === category)[0]._id;
 		setProduct((prevState) => ({
 			...prevState,
 			category,
 		}));
+		getTagsByCategory(id).then((result) => setTags([...result]));
 	};
 
 	const tagHandler = (tag) => {
@@ -216,7 +219,7 @@ const ProductForm = () => {
 					<select
 						name="category"
 						id="category"
-						value={product.category ? product.category : "select"}
+						value={product.category || "select"}
 						onChange={(event) =>
 							categoryHandler(event.target.value)
 						}
