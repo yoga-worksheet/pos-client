@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getCategories } from "../../api/category";
-import { getTags } from "../../api/tag";
 import { getProducts } from "../../api/product";
 import { useDispatch, useSelector } from "react-redux";
 import { setPages } from "../../features/Product/action";
@@ -12,21 +10,12 @@ const Home = () => {
 	const queries = useSelector((state) => state.product);
 	const dispatch = useDispatch();
 	const { currentPage, query: q, category, tags, skip, pages } = queries;
-	const [categories, setCategories] = useState([]);
-	const [tagList, setTagList] = useState([]);
 	const [products, setProducts] = useState([]);
-	useEffect(() => {
-		getCategories().then((result) => setCategories(result));
-		getTags().then((result) => setTagList(result));
-		return () => {
-			setCategories([]);
-			setTagList([]);
-		};
-	}, []);
+
 	useEffect(() => {
 		getProducts({
 			q,
-			category,
+			category: category.name,
 			skip,
 			tags,
 			limit: 8,
@@ -44,10 +33,14 @@ const Home = () => {
 	return (
 		<div>
 			<div className="mt-0 lg:mt-12 mb-12 px-6 lg:px-12 w-full h-auto flex flex-col lg:flex-row flex-wrap justify-between">
-				<LeftSection tags={tagList} categories={categories} />
+				<LeftSection  />
 				<ProductList products={products} />
 			</div>
-			<Pagination count={pages} currentPage={queries.currentPage} />
+			<Pagination
+				count={pages}
+				currentPage={queries.currentPage}
+				additionalClass="mb-12"
+			/>
 		</div>
 	);
 };

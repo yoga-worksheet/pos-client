@@ -7,7 +7,7 @@ import {
 } from "./constants";
 
 const initialState = {
-	category: "",
+	category: {},
 	tags: [],
 	query: "",
 	pages: 1,

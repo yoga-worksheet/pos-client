@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../features/Product/action";
 
-const Pagination = ({ count, currentPage, perPage = 8 }) => {
+const Pagination = ({ count, currentPage, additionalClass, perPage = 8 }) => {
 	const dispatch = useDispatch();
 	const [position, setPosition] = useState(1);
 	const [pages, setPages] = useState([]);
@@ -43,7 +43,7 @@ const Pagination = ({ count, currentPage, perPage = 8 }) => {
 	};
 
 	return (
-		<div className="w-full flex justify-center mb-12">
+		<div className={"w-full flex justify-center ".concat(additionalClass)}>
 			<button
 				className="w-10 h-10 transition rounded-full text-slate-700 hover:text-blue-500"
 				onClick={() => pageHandler(0)}

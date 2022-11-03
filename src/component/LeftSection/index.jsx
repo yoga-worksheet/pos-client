@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { getCategories } from "../../api/category";
+import { getTags, getTagsByCategory } from "../../api/tag";
 import { filterByCategory, filterByTag } from "../../features/Product/action";
 import Button from "../Button";
 
-const LeftSection = ({ tags, categories }) => {
+const LeftSection = () => {
 	const dispatch = useDispatch();
+	const [categories, setCategories] = useState([]);
+	const [tags, setTags] = useState([]);
+	const [choosenTags, setChoosenTags] = useState([]);
 	const [choosenCategory, setChoosenCategory] = useState({
 		id: "",
 		name: "",
 	});
-	const [choosenTags, setChoosenTags] = useState([]);
 
 	useEffect(() => {
-		dispatch(filterByCategory(choosenCategory.name));
+		getCategories().then((result) => setCategories(result));
+		getTags().then((result) => setTags(result));
+		return () => {
+			setCategories([]);
+			setTags([]);
+		};
+	}, []);
+
+	useEffect(() => {
+		dispatch(filterByCategory(choosenCategory));
 	}, [choosenCategory]);
 
 	useEffect(() => {
@@ -22,13 +35,16 @@ const LeftSection = ({ tags, categories }) => {
 	const categoryHandler = (category) => {
 		if (!choosenCategory.id || choosenCategory.id !== category._id) {
 			setChoosenCategory({ id: category._id, name: category.name });
+			getTagsByCategory(category._id).then((result) => setTags(result));
 		} else {
 			setChoosenCategory({
 				id: "",
 				name: "",
 			});
+			getTags().then((result) => setTags(result));
 		}
 	};
+
 	const tagsHandler = (tag) => {
 		if (
 			choosenTags.length &&
@@ -41,6 +57,7 @@ const LeftSection = ({ tags, categories }) => {
 			setChoosenTags((prevState) => [...prevState, tag]);
 		}
 	};
+
 	return (
 		<div className="bg-[#ffffff] text-slate-700 shadow-lg rounded-3xl w-full lg:w-3/12 h-fit px-6 py-10 mb-6 lg:mb-0 space-y-10">
 			<div className="space-y-4">

@@ -13,7 +13,7 @@ const Products = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const queries = useSelector((state) => state.product);
-	const { currentPage, query: q, category, tags, skip, pages } = queries;
+	const { currentPage, skip, pages } = queries;
 	const [products, setProducts] = useState([]);
 	const [keyword, setKeyword] = useState("");
 	const [modal, setModal] = useState("");
@@ -47,17 +47,9 @@ const Products = () => {
 			setProducts(result.data);
 		});
 
-	// useEffect(() => {
-	// 	fetchProducts();
-	// 	return () => {
-	// 		setProducts([]);
-	// 	};
-	// }, []);
-
 	useEffect(() => {
 		getProducts({
 			skip,
-			tags,
 			limit: 5,
 		}).then((result) => {
 			setProducts(result.data);
@@ -134,6 +126,7 @@ const Products = () => {
 				count={pages}
 				currentPage={queries.currentPage}
 				perPage={5}
+				additionalClass="mt-6"
 			/>
 		</div>
 	);
