@@ -108,7 +108,7 @@ const Index = () => {
 							: "font-bold text-3xl transition ease-in-out hover:text-blue-500"
 					}
 				>
-					<NavLink to="/">Action Figure</NavLink>
+					<NavLink to="/">Funtastic Shop</NavLink>
 				</h1>
 				<button
 					className="flex items-center transition ease-in-out lg:hidden text-3xl bg-indigo-100 p-3 rounded-full hover:shadow-lg"
