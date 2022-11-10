@@ -17,12 +17,10 @@ const ProductItem = ({ product }) => {
 			image_url,
 			qty: 1,
 		};
-		if (!localStorage.getItem("auth") || user.role === "admin") {
-			setModal(
-				user.role === "admin"
-					? "You must log in as a user!"
-					: "You must log in before using cart!"
-			);
+		if (!localStorage.getItem("auth")) {
+			setModal("You must log in before using cart!");
+		} else if (user.role === "admin") {
+			setModal("You must log in as a user!");
 		} else {
 			dispatch(addToCart(payload));
 		}

@@ -40,12 +40,18 @@ const Invoice = () => {
 						<tr className="border-b">
 							<td className="px-4 py-2">Order Items</td>
 							<td className="px-4 py-2">
-								{invoice.order.order_items.map((item) => (
-									<p>
-										- <span className="font-bold">{item.name}</span> x {item.qty} Pcs @{" "}
-										{idrFormatter(item.price)}
-									</p>
-								))}
+								{invoice.order.order_items.map(
+									(item, index) => (
+										<p key={index * 2}>
+											-{" "}
+											<span className="font-bold">
+												{item.name}
+											</span>{" "}
+											x {item.qty} Pcs @{" "}
+											{idrFormatter(item.price)}
+										</p>
+									)
+								)}
 							</td>
 						</tr>
 						<tr className="border-b">
