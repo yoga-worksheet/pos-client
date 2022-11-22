@@ -12,7 +12,7 @@ Live Preview : [https://pos-client-alpha.vercel.app/](https://pos-client-alpha.v
 
 See Back end service here : 
 - Live Preview : [https://pos-server-one.vercel.app/](https://pos-server-one.vercel.app/)
-- Repository : [https://github.com/yoga-worksheet/Pos-server] (https://github.com/yoga-worksheet/Pos-server)
+- Repository : [https://github.com/yoga-worksheet/Pos-server](https://github.com/yoga-worksheet/Pos-server)
 
 ## Built with
 - React js
